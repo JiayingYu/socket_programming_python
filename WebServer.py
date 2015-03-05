@@ -1,0 +1,40 @@
+__author__ = 'jiayingyu'
+#import socket module
+from socket import *
+
+#IP version 4, TCP protocol
+serverSocket = socket(AF_INET, SOCK_STREAM) #Prepare a sever socket
+print 'socket created'
+
+serverAddr = ('', 8787)
+
+serverSocket.bind(serverAddr)
+print 'socket bind complete'
+
+serverSocket.listen(2);
+print 'Socket now listening'
+
+while True:
+    #Establish the connection
+    print 'Ready to serve...'
+    connectionSocket, addr = serverSocket.accept()
+
+    try:
+        message = connectionSocket.recv(1024)
+        print message
+
+        filename = message.split()[1]
+        f = open(filename[1:])
+        outputdata = f.read()
+        print outputdata
+
+        connectionSocket.send('\nHTTP/1.1 200 OK \n\n')
+        #connectionSocket.sendall(outputdata)
+        for i in range(0, len(outputdata)):
+            connectionSocket.send(outputdata[i])
+        connectionSocket.close()
+    except IOError:
+        connectionSocket.send('\nHTTP/1.1 404 Not Found \n\n')
+        connectionSocket.close()
+
+serverSocket.close()
