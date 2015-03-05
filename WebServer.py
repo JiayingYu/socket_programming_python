@@ -24,6 +24,7 @@ while True:
         print message
 
         filename = message.split()[1]
+        print '\nFILENAME: ' + filename + '\n'
         f = open(filename[1:])
         outputdata = f.read()
         print outputdata
@@ -35,6 +36,7 @@ while True:
         connectionSocket.close()
     except IOError:
         connectionSocket.send('\nHTTP/1.1 404 Not Found \n\n')
+        print 'FILE NOT FOUND'
         connectionSocket.close()
 
 serverSocket.close()
